@@ -1,0 +1,83 @@
+###
+# @name loginPartner1
+
+POST http://localhost:3000/auth/login
+Content-type: application/json
+
+{
+    "email": "partner88@user.com",
+    "password": "secret"
+}
+
+### Criação do evento pelo parceiro
+
+@tokenPartner1 = {{ loginPartner1.response.body.token }}
+
+###
+
+###
+# @name loginCustomer1
+
+POST http://localhost:3000/auth/login
+Content-type: application/json
+
+{
+    "email": "customer8@user.com",
+    "password": "secret"
+}
+
+### Criação do evento pelo parceiro
+
+@tokenCustomer1 = {{ loginCustomer1.response.body.token }}
+
+###
+
+POST http://localhost:3000/partners/register
+Content-type: application/json
+
+{
+    "name": "Partner 1",
+    "email": "partner88@user.com",
+    "password": "secret",
+    "company_name": "Company 1"
+}
+
+###
+POST http://localhost:3000/customers/register
+Content-type: application/json
+
+{
+    "name": "Customer 4",
+    "email": "customer8@user.com",
+    "password": "secret",
+    "address": "Address 4",
+    "phone": "1234567879"
+}
+
+###
+POST http://localhost:3000/partners/events
+Content-type: application/json
+Authorization: Bearer {{ tokenPartner1 }}
+
+
+{
+    "name": "Evento teste",
+    "description": "Evento para teste gatos",
+    "date": "2021-10-10T00:00:00",
+    "location": "Location 1"
+}
+
+### Listagem de eventos do parceiro
+GET http://localhost:3000/partners/events
+Authorization: Bearer {{ tokenPartner1 }}
+
+### LIstagem de 1 evento do parceiro
+GET http://localhost:3000/partners/events/1
+Authorization: Bearer {{ tokenPartner1 }}
+
+### Listagem de eventos do cliente
+GET http://localhost:3000/events
+
+### LIstagem de 1 evento do cliente
+GET http://localhost:3000/events/1
+
